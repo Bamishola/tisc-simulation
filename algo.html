@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Épidémiologique</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        ul {
+    text-align: left;
+    list-style-position: inside;
+    padding-left: 0;
+    margin-left: 0;
+}
+.section ul {
+    display: inline-block;
+    text-align: left;
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <img src="images/img2.png" alt="logo-ecc">
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" href="#" onclick="showFrame('frame1', 'Simulation 1')">S1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showFrame('frame2', 'Simulation 2')">S2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showFrame('frame3', 'Simulation 3')">S3</a>
+              </li>
+              <li class="nav-item s8">
+                <span>S8- Théorie de l'information et Systèmes Complexes</span>
+
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    <div class="container">
+        <h1>Simulation Épidémiologique</h1>
+        <nav>
+            <button onclick="showSection('parametres')">Définition des paramètres</button>
+            <button onclick="showSection('initialisation')">Initialisation des populations</button>
+            <button onclick="showSection('maj')">Mise à jour des populations</button>
+            <button onclick="showSection('simulation')">Simulation et Traçage</button>
+            <button onclick="showSection('interface')">Gestion de l'interface</button>
+        </nav>
+        
+        <div id="parametres" class="section active">
+            <h2>Définition des paramètres</h2>
+            <p>Déclaration des variables globales : unitNumber, step, beta, lambda, mu, nu...</p>
+
+            <ul>
+                <li><strong>unitNumber = 28</strong> : La simulation s’étend sur 28 unités de temps.</li>
+                <li><strong>step = 0.1</strong> : Pas de discrétisation (intervalle entre deux calculs successifs).</li>
+                <li><strong>beta, lambda, mu, nu</strong> : Paramètres de transmission, récupération et autres dynamiques de l’épidémie.</li>
+                <li><strong>S, I, R, C, P</strong> : Tableaux contenant les valeurs des populations à chaque instant.</li>
+            </ul>
+            
+        </div>
+
+
+        <div id="initialisation" class="section">
+            <h2>Initialisation des populations</h2>
+            <p>Les populations sont stockées sous forme de tableaux de la taille <code>unitNumber * (1/step)</code>, représentant la progression sur le temps.</p>
+    
+    <ul>
+        <li><strong>S</strong> : Population saine</li>
+        <li><strong>I</strong> : Population infectée</li>
+        <li><strong>R</strong> : Population rétablie</li>
+        <li><strong>C</strong> : Population contaminée (cas spécifique à la version 3)</li>
+        <li><strong>P</strong> : Population totale (somme de <strong>S</strong>, <strong>I</strong> et <strong>R</strong>)</li>
+    </ul>
+
+        </div>
+
+
+        <div id="maj" class="section">
+            <h2>Fonctions de mise à jour</h2>
+            <p>Calcul de l'évolution des catégories à chaque instant...</p>
+
+            <p>Ces fonctions calculent l’évolution des différentes catégories à chaque instant <code>i</code> :</p>
+    
+    <ul>
+        <li><code>getS(i, v)</code> : Met à jour la population saine en fonction des infections.</li>
+        <li><code>getI[v-1](i)</code> : Met à jour la population infectée en tenant compte des infections et guérisons.</li>
+        <li><code>getR(i, v)</code> : Met à jour la population rétablie en fonction du taux de guérison.</li>
+        <li><code>getC(i, v)</code> : Met à jour la population contaminée dans le modèle avancé (<code>v == 3</code>).</li>
+        <li><code>getP[v-1](i)</code> : Met à jour la population totale.</li>
+    </ul>
+        </div>
+        <div id="simulation" class="section">
+            <h2>Simulation et Traçage</h2>
+            <p>Exécution des mises à jour et affichage des graphes...</p>
+
+            <ul>
+                <li><code>computeValues(v)</code> : Exécute les mises à jour des populations pour une version donnée (<code>v</code>).</li>
+                <li><code>options</code> : Définit les paramètres des graphiques (taille, couleurs, labels…).</li>
+                <li><code>functionPlot(options[i-1])</code> : Affiche les courbes des différentes populations sur le graphe.</li>
+                <li><code>addLegend(...)</code> : Ajoute une légende pour identifier les courbes.</li>
+            </ul>
+            
+        </div>
+        <div id="interface" class="section">
+            <h2>Gestion de l'interface</h2>
+            <p>Utilisation des sliders pour modifier les paramètres en temps réel...</p>
+
+            <ul>
+                <li><code>document.addEventListener('DOMContentLoaded', function () {...})</code> : Initialise les valeurs des sliders pour modifier les paramètres (<code>S0</code>, <code>I0</code>, <code>Lambda</code>, <code>Beta</code>, etc.).</li>
+                <li>Les sliders permettent d’ajuster les conditions initiales et d’observer les changements sur les graphes en temps réel.</li>
+            </ul>
+            
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
